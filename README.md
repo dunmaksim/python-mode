@@ -3,265 +3,260 @@
 Send source code to all known Python shells without need to reconfigure default.
 Provide fine grained navigation of all known Python constructs.
 
+## Initialize
 
-* Initialize
-  Make sure the directory, where python-mode.el resides, is in load-path
-  For expample put something like that in your init-file: 
+Make sure the directory, where python-mode.el resides, is in load-path
+For expample put something like that in your init-file:
 
-  (add-to-list 'load-path "PATH/TO/PYTHON-MODE")
-  (require 'python-mode)
+```emacs-lisp
+(add-to-list 'load-path "PATH/TO/PYTHON-MODE")
+(require 'python-mode)
+```
 
-  or probably still better: 
+or probably still better:
 
-  (setq py-install-directory "PATH/TO/PYTHON-MODE/")
-  (add-to-list 'load-path py-install-directory)
-  (require 'python-mode)
+```emacs-lisp
+(setq py-install-directory "PATH/TO/PYTHON-MODE/")
+(add-to-list 'load-path py-install-directory)
+(require 'python-mode)
+```
 
-* Selecting a Python shell:
+## Selecting a Python shell
 
-  Customize default Python shell as `py-shell-name'
+Customize default Python shell as `py-shell-name`
 
-  `py-shell-name' might be an installed default executable as shell
-  command `type' would display, but also a PATH/TO/EXECUTABLE
+`py-shell-name` might be an installed default executable as shell command `type` would display, but also a PATH/TO/EXECUTABLE
 
-  If different flavours of Python are installed, in order to adress
-  them customize var `py-known-shells' and reload. python-mode will
-  create the required commands according to contents of this list.
+If different flavours of Python are installed, in order to adress them customize var `py-known-shells` and reload. `python-mode` will create the required commands according to contents of this list.
 
-  Depending from your instell the var py-known-shells might show contents like that:
-  ("ipython" "ipython2.7" "ipython3" "jython" "python" "python2" "python3" "pypy")
+Depending from your instell the var `py-known-shells` might show contents like that:
 
-  If needed, customize respective arguments
-  py-SHELL-command-args,  i.e.
+```emacs-lisp
+("ipython" "ipython2.7" "ipython3" "jython" "python" "python2" "python3" "pypy")
+```
 
-  py-python-command-args
-  py-python3-command-args
-  py-ipython-command-args
+If needed, customize respective arguments `py-SHELL-command-args`, i.e.
 
-  etc.
+- `py-python-command-args`
+- `py-python3-command-args`
+- `py-ipython-command-args`
 
-  Commands related to a specific shell start with
+etc.
 
-  M-x SHELL RET
+Commands related to a specific shell start with **[M-x]** `SHELL` **[RET]**.
 
-  This calls py-shell with its default arguments
-  With C-u, shell will get an unique name.
+This calls `py-shell` with its default arguments. With **[C-u]**, shell will get an unique name.
 
-  According to contents of `py-known-shells' commands might be
-  available like this:
+According to contents of `py-known-shells` commands might be available like this:
 
-  M-x py-shell RET ==> "*Python*"
-  M-x python RET ==> "*Python*"
-  M-x ipython RET ==> "*IPython*"
-  M-x python3 RET ==> "*Python3*"
+| Command    | Result  |
+|:-----------|:--------|
+| `py-shell` | Python  |
+| `python`   | Python  |
+| `ipython`  | IPython |
+| `python3`  | Python3 |
 
-  etc.
+etc.
 
-  A shebang precedes default py-shell-name.
-  In case you will run code by default-shell, ignoring shebang, set
-  `py-force-py-shell-name-p' to. This might be done also via menu
-  Python/.../Switches
+A shebang precedes default `py-shell-name`.
+In case you will run code by default-shell, ignoring shebang, set `py-force-py-shell-name-p` to. This might be done also via menu Python/.../Switches.
 
-  Run a local shell by evaluating
+Run a local shell by evaluating
 
-  (defun MY-LOCAL-SHELL ()
+```emacs-lisp
+(defun MY-LOCAL-SHELL ()
   (interactive)
   (py-shell nil DEDICATED PATH-TO-LOCAL-SHELL))
+```
 
-* Prefix conventions
+## Prefix conventions
 
-  Most python-mode.el commands start with prefix `py-'
+Most `python-mode.el` commands start with prefix `py-`. **[M-x py TAB]** displays a list of them in completion-buffer. See also commands list delivered in directory [doc](./doc/).
 
-  `M-x py- TAB'
-  displays a list of them in completion-buffer.
-  See also commands list delivered in directory doc.
+List virtualenv related `M-x virtualenv- TAB` resp. Pymacs commands `M-x pymacs-`.
 
-  List virtualenv related `M-x virtualenv- TAB'
-  resp. Pymacs commands `M-x pymacs-'
+## Execution code
 
-* Execution code
-  Python code might be processed by an
+Python code might be processed by an
 
-- interactive Python shell (DEFAULT)
-- non-interactive Python (`py-fast-process-p')
-  The latter, while design for large output, seems more reliable - see  also PROBLEMS.org.
+- interactive Python shell (DEFAULT);
+- non-interactive Python (`py-fast-process-p`).
 
-Both processes might run in 
-- session, i.e. start from possible previous state (DEFAULT)
-- dedicated, (`py-dedicated-process-p') run in separate process
+The latter, while design for large output, seems more reliable — see also [PROBLEMS.org](./PROBLEMS.org).
 
-There is also
-- python-mode-v5-behavior
+Both processes might run in:
 
-* Checks
-  Access is provided to a couple of known checkers like Flake8, pep8, pylint
-  Need to be installed for example calling "pip install pep8" from a shell command-line
-  Get flycheck from https://www.flycheck.org
+- session, i.e. start from possible previous state (DEFAULT);
+- dedicated, (`py-dedicated-process-p`) run in separate process.
 
-* Displaying Output
+There is also `python-mode-v5-behavior`.
 
-  `py-execute-...'-commands arrive in buffer created by
-  `py-shell'. It's name is composed WRT to Python
-  version used, it's path etc. 
+## Checks
 
-  Result of commands ending  "-fast"
-  arrives in `py-fast-output-buffer'
-  
-* Window management
-  Variables in question:
+Access is provided to a couple of known checkers like Flake8, PEP8, PyLint need to be installed for example calling `pip install pep8` from a shell command-line.
 
-  ** py-keep-windows-configuration 
+Get flycheck from https://www.flycheck.org.
 
-  Default is nil.
-  When non-nil, it takes precedence over
-  `py-split-window-on-execute' and `py-switch-buffers-on-execute-p'
-  settings
+## Displaying Output
 
-  Useful, if a pre-designed set of python-shells/buffers should be
-  maintained
+`py-execute-...`-commands arrive in buffer created by `py-shell`. It's name is composed WRT to Python version used, it's path etc.
 
-  ** py-split-window-on-execute
+Result of commands ending `-fast` arrives in `py-fast-output-buffer`.
 
-  When non-nil split windows according to value set.
+## Window management
 
-  Default is 'just-two: when code is send to interpreter, split screen
-  into source-code buffer and current py-shell result. Other buffers
-  will be hidden that way.
+Variables in question:
 
-  When set to `t', python-mode tries to reuse existing windows and
-  will split only if needed.
+- `py-keep-windows-configuration`
 
-  With 'always, results will displayed in a new window.
+    When non-nil, it takes precedence over `py-split-window-on-execute` and `py-switch-buffers-on-execute-p` settings.
+    Useful, if a pre-designed set of python-shells/buffers should be maintained.
 
-  ** py-switch-buffers-on-execute-p
+    Default is `nil`.
 
-  Put focus into the output buffer: this will display buffer in any
-  case
+- `py-split-window-on-execute`
 
-* Completion
-  At the end of a word TAB by default calls completion.
+    When non-nil split windows according to value set.
 
-  Auto-completion should be available via
+    When set to `t`, python-mode tries to reuse existing windows and will split only if needed.
 
-  (require 'auto-complete-config)
-  (ac-config-default)
+    With `always`, results will displayed in a new window.
 
-  or for company:
+    Default is `just-two`: when code is send to interpreter, split screen into source-code buffer and current py-shell result. Other buffers will be hidden that way.
 
-  (autoload 'company-mode "company" nil t)
+- `py-switch-buffers-on-execute-p`
 
-  There is also a Pymacs based auto-completion mode
-  see README-PYMACS.org
+    Put focus into the output buffer: this will display buffer in any case.
 
-  Either use Pymacs and `company-mode' with `pycomplete.el' etc. --load
-  stuff from folder completion--
+## Completion
 
-  or switch `py-auto-completion-mode-p' - which relies on
-  `py-shell-complete', i.e. calls the current Python process.
+At the end of a word **[TAB]** by default calls completion.
 
-  Extern tools like jedi-server/mode should work too.
+Auto-completion should be available via
 
+```emacs-lisp
+(require 'auto-complete-config)
+(ac-config-default)
+```
 
-* Moving
+or for Company:
 
-  Beside common moves like `defun', `statement', block
-  called via py-end-of-..., py-beginning-...
-  specific Python-mode edits are delivered:
+```emacs-lisp
+(autoload 'company-mode "company" nil t)
+```
 
-  `py-expression' and `py-partial-expression'. 
+There is also a Pymacs based auto-completion mode see [README-PYMACS.org](./README-PYMACS.org).
 
-  Statement below is considered composed of two `py-expression' 
+Either use Pymacs and `company-mode` with `pycomplete.el` etc.
 
-  a = ['spam', 'eggs', 100, 1234]
-  ||  |_________________________|
+Load stuff from folder completion or switch `py-auto-completion-mode-p` — which relies on `py-shell-complete`, i.e. calls the current Python process.
 
-  Assigment operator and all inside comments is ignored.
+Extern tools like jedi-server/mode should work too.
 
-  `py-partial-expression' would match six sections
+## Moving
 
-  a = ['spam', 'eggs', 100, 1234]
-  ||   |_____| |_____| |__| |___|
-  |_____________________________|
+Beside common moves like `defun', `statement', block called via `py-end-of-...`, `py-beginning-...` specific Python-mode edits are delivered: `py-expression` and `py-partial-expression`.
 
-  When traversing code, `py-partial-expression' climbs down and up
-  all levels encountered, i.e. at opening `[' `py-expression' would return ['spam', 'eggs', 100, 1234], while one char behind at `''
-  it yields `'spam','
+Statement below is considered composed of two `py-expression`:
 
-- py-sexp-function, 
-  When set, it's value is called instead of `forward-sexp', `backward-sexp
-  Choices are py-partial-expression, py-expression, default nil
+```text
+a = ['spam', 'eggs', 100, 1234]
+||  |_________________________|
+```
 
+Assigment operator and all inside comments is ignored.
 
-* Filling
-  Customize boolean `py-set-fill-column-p'
+`py-partial-expression` would match six sections:
 
-  If `t', enables use Python specific `fill-column' according to
+```text
+a = ['spam', 'eggs', 100, 1234]
+||   |_____| |_____| |__| |___|
+|_____________________________|
+```
 
-  `py-docstring-fill-column', default is 72
+When traversing code, `py-partial-expression` climbs down and up all levels encountered, i.e. at opening `[` `py-expression` would return `['spam', 'eggs', 100, 1234]`, while one char behind at `'` it yields `'spam',`
 
-  and `py-comment-fill-column, default is 79
+- `py-sexp-function`
 
-  Comment- and docstring settings might be disabled by
-  any non-integer value, which means: do not use a
-  different value of `fill-column' than emacs-wide
+    When set, it's value is called instead of `forward-sexp`, `backward-sexp`.
+    Choices are `py-partial-expression`, `py-expression`.
 
-* Python and IPython
+    Default is `nil`.
 
-  Start IPython shell after loading python-mode via M-x
-  ipython, not from plain shell.
 
-  Executing code through IPython should work as with
-  regular Python, also getting completions from. However,
-  with IPython, it feels a demi-second slower.
+## Filling
 
-* Session mode
-  Py-shell runs in session mode by default. Not to run in session
-  mode, customize `py-session-p' to nil. Or for current session call
-  `py-toggle-session-p'. 
+Customize boolean `py-set-fill-column-p`.
 
-* Troubleshooting
+If `t`, enables use Python specific `fill-column` according to:
 
-  Start with Emacs -Q from the directory where python-mode.el lives.
-  Open python-mode.el and evaluate it.
+- `py-docstring-fill-column`, default is 72,
+- `py-comment-fill-column`, default is 79
 
-  Open a file with ending ".py".
+Comment- and docstring settings might be disabled by any non-integer value, which means: do not use a different value of `fill-column` than emacs-wide.
 
-  M-x python RET
 
-  a regular Python-shell should appear
+## Python and IPython
 
-  M-x IPython RET
+Start IPython shell after loading python-mode via **[M-x ipython RET]**, not from plain shell.
 
-  an IPython-shell should be opened
+Executing code through IPython should work as with regular Python, also getting completions from. However, with IPython, it feels a demi-second slower.
 
-  ** pdb doesn't work at Windows
-  Richard Stanton commented:
 
-  Running M-x pdb doesn't work on my Windows machine, primarily because
-  Windows (at least using the default shell) doesn't automatically know
-  what to do when you give it a .py command at the command line.
+## Session mode
 
-  For example, here's the suggested command when I run pdb on a file
-  c:\projects/run.py:
+Py-shell runs in session mode by default. Not to run in session mode, customize `py-session-p` to `nil`. Or for current session call
+`py-toggle-session-p`.
 
-  c:/python27/Lib/pdb.py run.py
 
-  If I accept this, I get an error "Spawning child process: Invalid
-  argument"
+## Troubleshooting
 
-  A work-around to get it to work is to replace the suggested command
-  with
+Start with Emacs -Q from the directory where `python-mode.el` lives.
 
-  c:\python27\python -i c:/python27/Lib/pdb.py c:/projects/run.py
+1. Open `python-mode.el` and evaluate it.
 
-  (note that I not only have to add the python command, but also fully
-  qualify the script file, since otherwise it complains it can't find
-  the file).
+1. Open a file with ending `.py`.
 
-* Testing
+1. **[M-x python RET]**.
 
-  File `run-travis-ci.sh' runs tests in batch-mode locally and remote.
-  If the shell-variable WERKSTATT is set to 0, local run is assumed.
-  The script does
-  WERKSTATT=${WERKSTATT:=1}
-  i.e. if WERKSTATT is not set, it  will be 1, which means "remote" here.
+    A regular Python-shell should appear.
+
+1. **[M-x IPython RET]**.
+
+    An IPython-shell should be opened.
+
+
+**`pdb` doesn't work at Windows**
+
+Richard Stanton commented:
+
+> Running **[M-x pdb]**` doesn't work on my Windows machine, primarily because Windows (at least using the default shell) doesn't automatically know what to do when you give it a `.py` command at the command line.
+>
+> For example, here's the suggested command when I run `pdb` on a file `c:\projects/run.py`:
+>
+> ```shell
+> c:/python27/Lib/pdb.py run.py
+> ```
+>
+> If I accept this, I get an error "Spawning child process: Invalid argument"
+>
+> A work-around to get it to work is to replace the suggested command with
+>
+> ```shell
+> c:\python27\python -i c:/python27/Lib/pdb.py c:/projects/run.py
+> ```
+>
+> (note that I not only have to add the python command, but also fully qualify the script file, since otherwise it complains it can't find the file).
+
+
+## Testing
+
+File `run-travis-ci.sh` runs tests in batch-mode locally and remote.
+If the shell-variable `WERKSTATT` is set to `0`, local run is assumed.
+The script does
+
+```shell
+WERKSTATT=${WERKSTATT:=1}
+```
+
+i.e. if `WERKSTATT` is not set, it  will be `1`, which means "remote" here.
